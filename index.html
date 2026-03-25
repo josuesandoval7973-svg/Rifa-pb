@@ -24,6 +24,34 @@
       font-size: 1.2em;
     }
 
+    .boletos {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      gap: 10px;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .boleto {
+      background: white;
+      color: black;
+      padding: 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-weight: bold;
+    }
+
+    .boleto:hover {
+      transform: scale(1.05);
+    }
+
+    .seleccionado {
+      background: #25D366;
+      color: white;
+    }
+
     .boton {
       display: inline-block;
       margin: 20px;
@@ -46,7 +74,9 @@
 <body>
 
   <h1>🎟️ Rifa Palos Blancos</h1>
-  <p>Bienvenido, selecciona tus boletos y aparta vía WhatsApp</p>
+  <p>Selecciona tus boletos y aparta por WhatsApp</p>
+
+  <div class="boletos" id="listaBoletos"></div>
 
   <a class="boton" id="whatsappBtn" target="_blank">Apartar por WhatsApp 📲</a>
 
@@ -54,8 +84,36 @@
     // Cambia tu número aquí
     let numero = "5216871820645"; // ← tu número WhatsApp sin + ni espacios
 
+    let seleccionados = [];
+    const contenedor = document.getElementById("listaBoletos");
+
+    // Generar 500 boletos
+    for (let i = 1; i <= 500; i++) {
+      const div = document.createElement("div");
+      div.classList.add("boleto");
+      div.innerText = i;
+
+      div.onclick = () => {
+        if (seleccionados.includes(i)) {
+          seleccionados = seleccionados.filter(n => n !== i);
+          div.classList.remove("seleccionado");
+        } else {
+          seleccionados.push(i);
+          div.classList.add("seleccionado");
+        }
+      };
+
+      contenedor.appendChild(div);
+    }
+
+    // Botón de WhatsApp
     document.getElementById("whatsappBtn").onclick = () => {
-      let mensaje = "Hola, quiero apartar boletos"; 
+      if (seleccionados.length === 0) {
+        alert("Selecciona al menos un número");
+        return;
+      }
+
+      const mensaje = "Hola, quiero apartar estos números: " + seleccionados.join(", ");
       window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`);
     };
   </script>
