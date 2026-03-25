@@ -11,7 +11,6 @@
   button { background: #25D366; color: #fff; border: none; padding: 10px 15px; font-size: 14px; margin: 3px; cursor: pointer; border-radius: 6px; }
   button:disabled { background: #ccc; cursor: not-allowed; }
   #boleto { font-size: 20px; margin-top: 20px; color: #333; }
-  #adminPanel { display:none; margin-top:20px; background:#eee; padding:10px; border-radius:8px; }
   #buttons { display:flex; flex-wrap:wrap; justify-content:center; }
 </style>
 </head>
@@ -19,25 +18,16 @@
 <div class="container">
   <h1>Rifa Moto FT150 Negra</h1>
   <img src="moto-ft150-negra.jpg" alt="Moto FT150 Negra">
-  <p>Precio por boleto: $100 MXN</p>
+  <p>Precio por boleto: $50 MXN</p>
   <p>Boletos disponibles: <span id="available">500</span></p>
 
   <div id="buttons"></div>
 
   <div id="boleto">🎟️ Aquí saldrá tu boleto</div>
-
-  <!-- Botón para admin -->
-  <button onclick="toggleAdmin()">Modo Admin</button>
-
-  <div id="adminPanel">
-    <h3>Marcar boletos vendidos</h3>
-    <label>Boleto #: <input type="number" id="adminBoleto" min="1" max="500"></label>
-    <button onclick="venderBoletoAdmin()">Marcar como vendido</button>
-  </div>
 </div>
 
 <script>
-  const miWhatsApp = "5216871820645; // Pon tu número con lada de México
+  const miWhatsApp = "5216871820645"; // Pon tu número con lada de México
   const totalBoletos = 500;
   const boletosVendidos = [];
 
@@ -60,38 +50,4 @@
     document.querySelectorAll('#buttons button')[numero-1].disabled = true;
 
     document.getElementById('boleto').innerText = `¡Compraste el boleto #${numero}! 🎟️`;
-    document.getElementById('available').innerText = totalBoletos - boletosVendidos.length;
-
-    const mensaje = encodeURIComponent(`Hola, quiero comprar el boleto #${numero} de la rifa.`);
-    window.open(`https://wa.me/${miWhatsApp}?text=${mensaje}`, '_blank');
-  }
-
-  function toggleAdmin() {
-    const panel = document.getElementById('adminPanel');
-    if (panel.style.display === 'none') {
-      const password = prompt("Ingresa contraseña de admin:");
-      if(password === "JISS11"){  // Esta es tu contraseña fácil de usar
-        panel.style.display = 'block';
-        alert("Modo Admin activado");
-      } else {
-        alert("Contraseña incorrecta");
-      }
-    } else {
-      panel.style.display = 'none';
-    }
-  }
-
-  function venderBoletoAdmin() {
-    const num = parseInt(document.getElementById('adminBoleto').value);
-    if(!boletosVendidos.includes(num)){
-      boletosVendidos.push(num);
-      document.querySelectorAll('#buttons button')[num-1].disabled = true;
-      document.getElementById('available').innerText = totalBoletos - boletosVendidos.length;
-      alert("Boleto #" + num + " marcado como vendido");
-    } else {
-      alert("Este boleto ya está vendido");
-    }
-  }
-</script>
-</body>
-</html>
+    document.getElementById('available').innerText = totalBoletos
