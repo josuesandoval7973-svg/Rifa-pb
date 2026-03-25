@@ -80,13 +80,15 @@
   </style>
 </head>
 <body>
-<img src="https://example.com/tu-imagen-ft150-negra.jpg" alt="Moto FT150 Negra">
 
+<header>
+  <img src="https://i.imgur.com/H5GfYb0.jpg" alt="Moto FT150 Negra">
 </header>
 
 <h1>🎟️ Rifa Palos Blancos</h1>
 <p>Selecciona tus boletos o deja que la máquina elija por ti</p>
-<p>Precio: $50 MXN cada boleto</p>
+<p>Fecha del sorteo: <strong>10 de junio 2026</strong></p>
+<p>Precio: <strong>$50 MXN</strong> cada boleto</p>
 
 <div class="boletos" id="listaBoletos"></div>
 
@@ -96,17 +98,17 @@
 <a class="boton" id="whatsappBtn" target="_blank">Apartar por WhatsApp 📲</a>
 
 <footer>
-  Fecha del sorteo: 10 de junio 2026
+  ¡Buena suerte! 🍀
 </footer>
 
 <script>
   let numero = "5216871820645"; // tu WhatsApp
-  let precio = 50; // precio por boleto
+  let precio = 50;
   let seleccionados = [];
   const contenedor = document.getElementById("listaBoletos");
 
-  // Lista de boletos ya vendidos (ejemplo)
-  const vendidos = [3, 5, 14,19,67]; 
+  // Boletos ya vendidos (ejemplo)
+  const vendidos = [3, 5, 14, 19, 26, 62, 67];
 
   const totalBoletos = 500;
 
