@@ -47,6 +47,7 @@ for(let i = 1; i <= totalBoletos; i++){
       alert('Este boleto ya fue vendido.');
       return;
     }
+    // Marcar como vendido
     boletosVendidos.push(i);
     btn.disabled = true;
     document.getElementById('boleto').textContent = `¡Compraste el boleto #${i}! 🎟️`;
@@ -65,9 +66,14 @@ searchInput.addEventListener('input', () => {
   const value = parseInt(searchInput.value);
   botones.forEach((b, idx) => {
     b.classList.remove('highlight');
-    if(idx + 1 === value) {
+    // Resaltar solo si no está vendido
+    if(idx + 1 === value){
       b.classList.add('highlight');
       b.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    // Si está vendido, deshabilitar
+    if(boletosVendidos.includes(idx + 1)){
+      b.disabled = true;
     }
   });
 });
