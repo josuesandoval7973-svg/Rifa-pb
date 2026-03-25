@@ -2,9 +2,8 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Rifa Palos Blancos</title>
+  <title>🎟️ Rifa Palos Blancos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -23,6 +22,7 @@
 
     h1 { margin: 20px 0 5px 0; font-size: 2.5em; }
     p { font-size: 1.2em; margin: 5px 0; }
+    ul { list-style: none; padding: 0; margin: 5px 0; }
 
     .boletos {
       display: grid;
@@ -44,7 +44,6 @@
     }
 
     .boleto:hover { transform: scale(1.05); }
-
     .seleccionado { background: #25D366; color: white; }
     .vendido { background: #555; color: #fff; cursor: not-allowed; }
 
@@ -89,6 +88,12 @@
 <p>Selecciona tus boletos o deja que la máquina elija por ti</p>
 <p>Fecha del sorteo: <strong>10 de junio 2026</strong></p>
 <p>Precio: <strong>$50 MXN</strong> cada boleto</p>
+<p>Métodos de pago:</p>
+<ul>
+  <li>💵 Efectivo / Transferencia SPEI</li>
+  <li>💳 PayPal / Mercado Pago</li>
+  <li>🏪 Oxxo</li>
+</ul>
 
 <div class="boletos" id="listaBoletos"></div>
 
@@ -108,7 +113,7 @@
   const contenedor = document.getElementById("listaBoletos");
 
   // Boletos ya vendidos (ejemplo)
-  const vendidos = [3, 5, 14, 19, 26, 62, 67];
+  const vendidos = [3, 5, 10];
 
   const totalBoletos = 500;
 
@@ -131,7 +136,6 @@
         }
       };
     }
-
     contenedor.appendChild(div);
   }
 
@@ -142,7 +146,7 @@
       return;
     }
     const total = seleccionados.length * precio;
-    const mensaje = `Hola, quisiera apartar estos boletos: ${seleccionados.join(", ")}\n\n¡Creeré en mi suerte! 🍀\nTotal: $${total} MXN`;
+    const mensaje = `Hola, quisiera apartar estos boletos: ${seleccionados.join(", ")}\n\n¡Creeré en mi suerte! 🍀\nTotal: $${total} MXN\nMétodo de pago: _______`;
     window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`);
   };
 
