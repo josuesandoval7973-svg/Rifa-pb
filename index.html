@@ -6,12 +6,14 @@
 <title>Rifa Moto FT150 Negra</title>
 <style>
   body { font-family: Arial, sans-serif; background: #f0f0f0; text-align: center; }
-  .container { max-width: 800px; margin: 30px auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  .container { max-width: 900px; margin: 30px auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
   img { width: 100%; border-radius: 10px; margin-bottom: 20px; }
-  button { background: #25D366; color: #fff; border: none; padding: 10px 15px; font-size: 14px; margin: 3px; cursor: pointer; border-radius: 6px; }
+  #buttons { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 5px; justify-items: center; margin-top: 10px; max-height: 500px; overflow-y: auto; }
+  button { background: #25D366; color: #fff; border: none; padding: 8px 10px; font-size: 14px; cursor: pointer; border-radius: 6px; }
   button:disabled { background: #ccc; cursor: not-allowed; }
-  #boleto { font-size: 20px; margin-top: 20px; color: #333; }
-  #buttons { display:flex; flex-wrap:wrap; justify-content:center; max-height: 600px; overflow-y: auto; }
+  #boleto { font-size: 18px; margin-top: 20px; color: #333; }
+  #search { padding: 8px; font-size: 14px; width: 150px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; }
+  .highlight { background: #FFD700 !important; color: #000; }
 </style>
 </head>
 <body>
@@ -21,40 +23,54 @@
   <p>Precio por boleto: $50 MXN</p>
   <p>Boletos disponibles: <span id="available">500</span></p>
 
+  <input type="number" id="search" placeholder="Buscar boleto #">
+
   <div id="buttons"></div>
 
   <div id="boleto">🎟️ Aquí saldrá tu boleto</div>
 </div>
 
 <script>
-  const miWhatsApp = "5216871820645; // Pon tu número con lada de México
-  const totalBoletos = 500;
-  const boletosVendidos = [];
+const miWhatsApp = "5216871820645"; // Pon tu número con lada de México
+const totalBoletos = 500;
+const boletosVendidos = [];
 
-  // Generar 500 botones automáticamente
-  const buttonsDiv = document.getElementById('buttons');
-  for(let i=1; i<=totalBoletos; i++){
-    const btn = document.createElement('button');
-    btn.innerText = `Boleto #${i}`;
-    btn.onclick = () => comprarBoleto(i);
-    buttonsDiv.appendChild(btn);
-  }
+const buttonsDiv = document.getElementById('buttons');
+const botones = [];
 
-  function comprarBoleto(numero) {
-    if (boletosVendidos.includes(numero)) {
+// Generar 500 botones
+for(let i = 1; i <= totalBoletos; i++){
+  const btn = document.createElement('button');
+  btn.textContent = `#${i}`;
+  btn.addEventListener('click', () => {
+    if(boletosVendidos.includes(i)){
       alert('Este boleto ya fue vendido.');
       return;
     }
+    boletosVendidos.push(i);
+    btn.disabled = true;
+    document.getElementById('boleto').textContent = `¡Compraste el boleto #${i}! 🎟️`;
+    document.getElementById('available').textContent = totalBoletos - boletosVendidos.length;
 
-    boletosVendidos.push(numero);
-    document.querySelectorAll('#buttons button')[numero-1].disabled = true;
-
-    document.getElementById('boleto').innerText = `¡Compraste el boleto #${numero}! 🎟️`;
-    document.getElementById('available').innerText = totalBoletos - boletosVendidos.length;
-
-    const mensaje = encodeURIComponent(`Hola, quiero comprar el boleto #${numero} de la rifa.`);
+    const mensaje = encodeURIComponent(`Hola, quiero comprar el boleto #${i} de la rifa.`);
     window.open(`https://wa.me/${miWhatsApp}?text=${mensaje}`, '_blank');
-  }
+  });
+  buttonsDiv.appendChild(btn);
+  botones.push(btn);
+}
+
+// Función de búsqueda
+const searchInput = document.getElementById('search');
+searchInput.addEventListener('input', () => {
+  const value = parseInt(searchInput.value);
+  botones.forEach((b, idx) => {
+    b.classList.remove('highlight');
+    if(idx + 1 === value) {
+      b.classList.add('highlight');
+      b.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  });
+});
 </script>
 </body>
 </html>
