@@ -6,11 +6,12 @@
 <title>Rifa Moto FT150 Negra</title>
 <style>
   body { font-family: Arial, sans-serif; background: #f0f0f0; text-align: center; }
-  .container { max-width: 600px; margin: 30px auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  .container { max-width: 800px; margin: 30px auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
   img { width: 100%; border-radius: 10px; margin-bottom: 20px; }
-  button { background: #25D366; color: #fff; border: none; padding: 15px 25px; font-size: 18px; margin: 5px; cursor: pointer; border-radius: 8px; }
+  button { background: #25D366; color: #fff; border: none; padding: 10px 15px; font-size: 14px; margin: 3px; cursor: pointer; border-radius: 6px; }
   button:disabled { background: #ccc; cursor: not-allowed; }
-  #boleto { font-size: 24px; margin-top: 20px; color: #333; }
+  #boleto { font-size: 20px; margin-top: 20px; color: #333; }
+  #buttons { display:flex; flex-wrap:wrap; justify-content:center; max-height: 600px; overflow-y: auto; }
 </style>
 </head>
 <body>
@@ -18,27 +19,26 @@
   <h1>Rifa Moto FT150 Negra</h1>
   <img src="moto-ft150-negra.jpg" alt="Moto FT150 Negra">
   <p>Precio por boleto: $50 MXN</p>
-  <p>Boletos disponibles: <span id="available">10</span></p>
+  <p>Boletos disponibles: <span id="available">500</span></p>
 
-  <div id="buttons">
-    <button onclick="comprarBoleto(1)">Boleto #1</button>
-    <button onclick="comprarBoleto(2)">Boleto #2</button>
-    <button onclick="comprarBoleto(3)">Boleto #3</button>
-    <button onclick="comprarBoleto(4)">Boleto #4</button>
-    <button onclick="comprarBoleto(5)">Boleto #5</button>
-    <button onclick="comprarBoleto(6)">Boleto #6</button>
-    <button onclick="comprarBoleto(7)">Boleto #7</button>
-    <button onclick="comprarBoleto(8)">Boleto #8</button>
-    <button onclick="comprarBoleto(9)">Boleto #9</button>
-    <button onclick="comprarBoleto(10)">Boleto #10</button>
-  </div>
+  <div id="buttons"></div>
 
   <div id="boleto">🎟️ Aquí saldrá tu boleto</div>
 </div>
 
 <script>
+  const miWhatsApp = "5216871820645; // Pon tu número con lada de México
+  const totalBoletos = 500;
   const boletosVendidos = [];
-  const miWhatsApp = "5216871820645"; // Pon tu número aquí, con lada de México
+
+  // Generar 500 botones automáticamente
+  const buttonsDiv = document.getElementById('buttons');
+  for(let i=1; i<=totalBoletos; i++){
+    const btn = document.createElement('button');
+    btn.innerText = `Boleto #${i}`;
+    btn.onclick = () => comprarBoleto(i);
+    buttonsDiv.appendChild(btn);
+  }
 
   function comprarBoleto(numero) {
     if (boletosVendidos.includes(numero)) {
@@ -50,10 +50,8 @@
     document.querySelectorAll('#buttons button')[numero-1].disabled = true;
 
     document.getElementById('boleto').innerText = `¡Compraste el boleto #${numero}! 🎟️`;
+    document.getElementById('available').innerText = totalBoletos - boletosVendidos.length;
 
-    document.getElementById('available').innerText = 10 - boletosVendidos.length;
-
-    // Abrir WhatsApp para que hagan la transferencia
     const mensaje = encodeURIComponent(`Hola, quiero comprar el boleto #${numero} de la rifa.`);
     window.open(`https://wa.me/${miWhatsApp}?text=${mensaje}`, '_blank');
   }
