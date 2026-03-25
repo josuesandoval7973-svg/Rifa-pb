@@ -75,7 +75,7 @@
     const contenedor = document.getElementById("listaBoletos");
 
     // Lista de boletos vendidos (ejemplo: 3, 5, 10)
-    const vendidos = [3,5,10]; 
+    const vendidos = [3,5,14,19,67]; 
 
     // Generar 500 boletos
     for (let i = 1; i <= 500; i++) {
@@ -108,7 +108,7 @@
       }
 
       const total = seleccionados.length * precio;
-      const mensaje = `Hola, quiero apartar estos números: ${seleccionados.join(", ")}. Total: $${total} MXN`;
+      const mensaje = `Hola, quisiera apartar estos boletos: ${seleccionados.join(", ")}\n\n¡Creeré en mi suerte! 🍀\nTotal: $${total} MXN`;
       window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`);
     };
   </script>
