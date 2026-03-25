@@ -8,29 +8,35 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #0f2027, #2c5364);
+      background-color: black;
       color: white;
       margin: 0;
       padding: 0;
       text-align: center;
     }
 
-    h1 { margin-top: 30px; font-size: 2.5em; }
-    p { font-size: 1.2em; }
+    header img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+    }
+
+    h1 { margin: 20px 0 5px 0; font-size: 2.5em; }
+    p { font-size: 1.2em; margin: 5px 0; }
 
     .boletos {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
       gap: 10px;
       padding: 20px;
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
     }
 
     .boleto {
       background: white;
       color: black;
-      padding: 15px;
+      padding: 10px;
       border-radius: 10px;
       cursor: pointer;
       transition: 0.3s;
@@ -40,77 +46,127 @@
     .boleto:hover { transform: scale(1.05); }
 
     .seleccionado { background: #25D366; color: white; }
-    .vendido { background: #999; color: #fff; cursor: not-allowed; }
+    .vendido { background: #555; color: #fff; cursor: not-allowed; }
 
-    .boton {
+    .boton, .azarBtn {
       display: inline-block;
-      margin: 20px;
-      padding: 15px 25px;
+      margin: 10px;
+      padding: 12px 20px;
       background: #25D366;
       color: white;
       border-radius: 10px;
       text-decoration: none;
-      font-size: 18px;
+      font-size: 16px;
       transition: 0.3s;
+      cursor: pointer;
     }
 
-    .boton:hover { transform: scale(1.05); background: #128C7E; }
+    .boton:hover, .azarBtn:hover { transform: scale(1.05); background: #128C7E; }
+
+    footer {
+      margin: 20px 0;
+      font-size: 1em;
+      color: #ccc;
+    }
+
+    input[type="number"] {
+      padding: 5px;
+      font-size: 16px;
+      border-radius: 5px;
+      margin-top: 10px;
+      width: 150px;
+      text-align: center;
+    }
   </style>
 </head>
-
 <body>
-  <h1>🎟️ Rifa Palos Blancos</h1>
-  <p>Selecciona tus boletos y aparta por WhatsApp</p>
 
-  <div class="boletos" id="listaBoletos"></div>
+<header>
+  <img src="https://via.placeholder.com/1200x300.png?text=Tu+Imagen+Aqui" alt="Rifa Palos Blancos">
+</header>
 
-  <a class="boton" id="whatsappBtn" target="_blank">Apartar por WhatsApp 📲</a>
+<h1>🎟️ Rifa Palos Blancos</h1>
+<p>Selecciona tus boletos o deja que la máquina elija por ti</p>
+<p>Precio: $50 MXN cada boleto</p>
 
-  <script>
-    // Tu número WhatsApp
-    let numero = "5216871820645"; // sin + ni espacios
-    let precio = 50; // Precio por boleto
+<div class="boletos" id="listaBoletos"></div>
 
-    let seleccionados = [];
-    const contenedor = document.getElementById("listaBoletos");
+<input type="number" id="cantidadAzar" placeholder="Número de boletos a azar" min="1" max="500">
+<button class="azarBtn" id="azarBtn">🎲 Lanzar la máquina</button>
 
-    // Lista de boletos vendidos (ejemplo: 3, 5, 10)
-    const vendidos = [3,5,14,19,67]; 
+<a class="boton" id="whatsappBtn" target="_blank">Apartar por WhatsApp 📲</a>
 
-    // Generar 500 boletos
-    for (let i = 1; i <= 500; i++) {
-      const div = document.createElement("div");
-      div.classList.add("boleto");
-      div.innerText = i;
+<footer>
+  Fecha del sorteo: 10 de junio 2026
+</footer>
 
-      if (vendidos.includes(i)) {
-        div.classList.add("vendido");
-      } else {
-        div.onclick = () => {
-          if (seleccionados.includes(i)) {
-            seleccionados = seleccionados.filter(n => n !== i);
-            div.classList.remove("seleccionado");
-          } else {
-            seleccionados.push(i);
-            div.classList.add("seleccionado");
-          }
-        };
-      }
+<script>
+  let numero = "5216871820645"; // tu WhatsApp
+  let precio = 50; // precio por boleto
+  let seleccionados = [];
+  const contenedor = document.getElementById("listaBoletos");
 
-      contenedor.appendChild(div);
+  // Lista de boletos ya vendidos (ejemplo)
+  const vendidos = [3, 5, 14,19,67]; 
+
+  const totalBoletos = 500;
+
+  // Generar boletos
+  for (let i = 1; i <= totalBoletos; i++) {
+    const div = document.createElement("div");
+    div.classList.add("boleto");
+    div.innerText = i;
+
+    if (vendidos.includes(i)) {
+      div.classList.add("vendido");
+    } else {
+      div.onclick = () => {
+        if (seleccionados.includes(i)) {
+          seleccionados = seleccionados.filter(n => n !== i);
+          div.classList.remove("seleccionado");
+        } else {
+          seleccionados.push(i);
+          div.classList.add("seleccionado");
+        }
+      };
     }
 
-    // Botón WhatsApp
-    document.getElementById("whatsappBtn").onclick = () => {
-      if (seleccionados.length === 0) {
-        alert("Selecciona al menos un número");
-        return;
-      }
+    contenedor.appendChild(div);
+  }
 
-      const total = seleccionados.length * precio;
-      const mensaje = `Hola, quisiera apartar estos boletos: ${seleccionados.join(", ")}\n\n¡Creeré en mi suerte! 🍀\nTotal: $${total} MXN`;
-      window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`);
-    };
-  </script>
+  // Botón WhatsApp
+  document.getElementById("whatsappBtn").onclick = () => {
+    if (seleccionados.length === 0) {
+      alert("Selecciona al menos un número");
+      return;
+    }
+    const total = seleccionados.length * precio;
+    const mensaje = `Hola, quisiera apartar estos boletos: ${seleccionados.join(", ")}\n\n¡Creeré en mi suerte! 🍀\nTotal: $${total} MXN`;
+    window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`);
+  };
+
+  // Máquina de azar
+  document.getElementById("azarBtn").onclick = () => {
+    const cantidad = parseInt(document.getElementById("cantidadAzar").value);
+    if (!cantidad || cantidad < 1) return alert("Ingresa una cantidad válida");
+
+    const disponibles = [];
+    for (let i = 1; i <= totalBoletos; i++) {
+      if (!vendidos.includes(i) && !seleccionados.includes(i)) disponibles.push(i);
+    }
+
+    if (cantidad > disponibles.length) return alert("No hay suficientes boletos disponibles");
+
+    for (let j = 0; j < cantidad; j++) {
+      const azarIndex = Math.floor(Math.random() * disponibles.length);
+      const boleto = disponibles.splice(azarIndex,1)[0];
+      seleccionados.push(boleto);
+
+      const div = contenedor.children[boleto-1];
+      div.classList.add("seleccionado");
+    }
+  };
+</script>
+
 </body>
 </html>
