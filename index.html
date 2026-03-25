@@ -1,177 +1,101 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>🎟️ Rifa Palos Blancos</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: black;
-      color: white;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-    }
-
-    header img {
-      width: 100%;
-      max-height: 300px;
-      object-fit: cover;
-    }
-
-    h1 { margin: 20px 0 5px 0; font-size: 2.5em; }
-    p { font-size: 1.2em; margin: 5px 0; }
-    ul { list-style: none; padding: 0; margin: 5px 0; }
-
-    .boletos {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-      gap: 10px;
-      padding: 20px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .boleto {
-      background: white;
-      color: black;
-      padding: 10px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.3s;
-      font-weight: bold;
-    }
-
-    .boleto:hover { transform: scale(1.05); }
-    .seleccionado { background: #25D366; color: white; }
-    .vendido { background: #555; color: #fff; cursor: not-allowed; }
-
-    .boton, .azarBtn {
-      display: inline-block;
-      margin: 10px;
-      padding: 12px 20px;
-      background: #25D366;
-      color: white;
-      border-radius: 10px;
-      text-decoration: none;
-      font-size: 16px;
-      transition: 0.3s;
-      cursor: pointer;
-    }
-
-    .boton:hover, .azarBtn:hover { transform: scale(1.05); background: #128C7E; }
-
-    footer {
-      margin: 20px 0;
-      font-size: 1em;
-      color: #ccc;
-    }
-
-    input[type="number"] {
-      padding: 5px;
-      font-size: 16px;
-      border-radius: 5px;
-      margin-top: 10px;
-      width: 150px;
-      text-align: center;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rifa Moto FT150 Negra</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f0f0f0; text-align: center; }
+  .container { max-width: 600px; margin: 30px auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  img { width: 100%; border-radius: 10px; margin-bottom: 20px; }
+  button { background: #25D366; color: #fff; border: none; padding: 15px 25px; font-size: 18px; margin: 5px; cursor: pointer; border-radius: 8px; }
+  button:disabled { background: #ccc; cursor: not-allowed; }
+  #boleto { font-size: 24px; margin-top: 20px; color: #333; }
+  #adminPanel { display:none; margin-top:20px; background:#eee; padding:10px; border-radius:8px; }
+</style>
 </head>
 <body>
+<div class="container">
+  <h1>Rifa Moto FT150 Negra</h1>
+  <img src="moto-ft150-negra.jpg" alt="Moto FT150 Negra">
+  <p>Precio por boleto: $100 MXN</p>
+  <p>Boletos disponibles: <span id="available">10</span></p>
 
-<header>
-  <img src="https://i.imgur.com/H5GfYb0.jpg" alt="Moto FT150 Negra">
-</header>
+  <div id="buttons">
+    <button onclick="comprarBoleto(1)">Boleto #1</button>
+    <button onclick="comprarBoleto(2)">Boleto #2</button>
+    <button onclick="comprarBoleto(3)">Boleto #3</button>
+    <button onclick="comprarBoleto(4)">Boleto #4</button>
+    <button onclick="comprarBoleto(5)">Boleto #5</button>
+    <button onclick="comprarBoleto(6)">Boleto #6</button>
+    <button onclick="comprarBoleto(7)">Boleto #7</button>
+    <button onclick="comprarBoleto(8)">Boleto #8</button>
+    <button onclick="comprarBoleto(9)">Boleto #9</button>
+    <button onclick="comprarBoleto(10)">Boleto #10</button>
+  </div>
 
-<h1>🎟️ Rifa Palos Blancos</h1>
-<p>Selecciona tus boletos o deja que la máquina elija por ti</p>
-<p>Fecha del sorteo: <strong>10 de junio 2026</strong></p>
-<p>Precio: <strong>$50 MXN</strong> cada boleto</p>
-<p>Métodos de pago:</p>
-<ul>
-  <li>💵 Efectivo / Transferencia SPEI</li>
-  <li>💳 PayPal / Mercado Pago</li>
-  <li>🏪 Oxxo</li>
-</ul>
+  <div id="boleto">🎟️ Aquí saldrá tu boleto</div>
 
-<div class="boletos" id="listaBoletos"></div>
+  <!-- Botón para admin -->
+  <button onclick="toggleAdmin()">Modo Admin</button>
 
-<input type="number" id="cantidadAzar" placeholder="Número de boletos a azar" min="1" max="500">
-<button class="azarBtn" id="azarBtn">🎲 Lanzar la máquina</button>
-
-<a class="boton" id="whatsappBtn" target="_blank">Apartar por WhatsApp 📲</a>
-
-<footer>
-  ¡Buena suerte! 🍀
-</footer>
+  <div id="adminPanel">
+    <h3>Marcar boletos vendidos</h3>
+    <label>Boleto #: <input type="number" id="adminBoleto" min="1" max="10"></label>
+    <button onclick="venderBoletoAdmin()">Marcar como vendido</button>
+  </div>
+</div>
 
 <script>
-  let numero = "5216871820645"; // tu WhatsApp
-  let precio = 50;
-  let seleccionados = [];
-  const contenedor = document.getElementById("listaBoletos");
+  const miWhatsApp = "5211234567890"; // tu número con lada de México
+  let boletosVendidos = [];
 
-  // Boletos ya vendidos (ejemplo)
-  const vendidos = [3, 5, 10];
-
-  const totalBoletos = 500;
-
-  // Generar boletos
-  for (let i = 1; i <= totalBoletos; i++) {
-    const div = document.createElement("div");
-    div.classList.add("boleto");
-    div.innerText = i;
-
-    if (vendidos.includes(i)) {
-      div.classList.add("vendido");
-    } else {
-      div.onclick = () => {
-        if (seleccionados.includes(i)) {
-          seleccionados = seleccionados.filter(n => n !== i);
-          div.classList.remove("seleccionado");
-        } else {
-          seleccionados.push(i);
-          div.classList.add("seleccionado");
-        }
-      };
-    }
-    contenedor.appendChild(div);
-  }
-
-  // Botón WhatsApp
-  document.getElementById("whatsappBtn").onclick = () => {
-    if (seleccionados.length === 0) {
-      alert("Selecciona al menos un número");
+  // Comprar boleto normal (usuario)
+  function comprarBoleto(numero) {
+    if (boletosVendidos.includes(numero)) {
+      alert('Este boleto ya fue vendido.');
       return;
     }
-    const total = seleccionados.length * precio;
-    const mensaje = `Hola, quisiera apartar estos boletos: ${seleccionados.join(", ")}\n\n¡Creeré en mi suerte! 🍀\nTotal: $${total} MXN\nMétodo de pago: _______`;
-    window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`);
-  };
 
-  // Máquina de azar
-  document.getElementById("azarBtn").onclick = () => {
-    const cantidad = parseInt(document.getElementById("cantidadAzar").value);
-    if (!cantidad || cantidad < 1) return alert("Ingresa una cantidad válida");
+    boletosVendidos.push(numero);
+    document.querySelectorAll('#buttons button')[numero-1].disabled = true;
 
-    const disponibles = [];
-    for (let i = 1; i <= totalBoletos; i++) {
-      if (!vendidos.includes(i) && !seleccionados.includes(i)) disponibles.push(i);
+    document.getElementById('boleto').innerText = `¡Compraste el boleto #${numero}! 🎟️`;
+    document.getElementById('available').innerText = 10 - boletosVendidos.length;
+
+    // Abrir WhatsApp para que hagan la compra
+    const mensaje = encodeURIComponent(`Hola, quiero comprar el boleto #${numero} de la rifa.`);
+    window.open(`https://wa.me/${miWhatsApp}?text=${mensaje}`, '_blank');
+  }
+
+  // Modo admin secreto
+  function toggleAdmin() {
+    const panel = document.getElementById('adminPanel');
+    if (panel.style.display === 'none') {
+      const password = prompt("Ingresa contraseña de admin:");
+      if(password === "TuContraseñaSecreta"){ // cambia esto a tu contraseña
+        panel.style.display = 'block';
+        alert("Modo Admin activado");
+      } else {
+        alert("Contraseña incorrecta");
+      }
+    } else {
+      panel.style.display = 'none';
     }
+  }
 
-    if (cantidad > disponibles.length) return alert("No hay suficientes boletos disponibles");
-
-    for (let j = 0; j < cantidad; j++) {
-      const azarIndex = Math.floor(Math.random() * disponibles.length);
-      const boleto = disponibles.splice(azarIndex,1)[0];
-      seleccionados.push(boleto);
-
-      const div = contenedor.children[boleto-1];
-      div.classList.add("seleccionado");
+  // Marcar boleto como vendido manualmente (solo admin)
+  function venderBoletoAdmin() {
+    const num = parseInt(document.getElementById('adminBoleto').value);
+    if(!boletosVendidos.includes(num)){
+      boletosVendidos.push(num);
+      document.querySelectorAll('#buttons button')[num-1].disabled = true;
+      document.getElementById('available').innerText = 10 - boletosVendidos.length;
+      alert("Boleto #" + num + " marcado como vendido");
+    } else {
+      alert("Este boleto ya está vendido");
     }
-  };
+  }
 </script>
-
 </body>
 </html>
