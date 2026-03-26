@@ -1,4 +1,4 @@
-30px<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -6,77 +6,63 @@
 <title>Rifa Moto FT150 Negra</title>
 <style>
   body { font-family: Arial, sans-serif; background: #f0f0f0; text-align: center; }
-  .container { max-width: 900px; margin: 30px auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  .container { max-width: 900px; margin: 30px auto; background: #fff; padding: 20px; border-radius: 10px; }
   img { width: 100%; border-radius: 10px; margin-bottom: 20px; }
-  #buttons { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 5px; justify-items: center; margin-top: 10px; max-height: 500px; overflow-y: auto; }
-  button { background: #25D366; color: #fff; border: none; padding: 8px 10px; font-size: 14px; cursor: pointer; border-radius: 6px; }
-  button:disabled { background: #ccc; cursor: not-allowed; }
-  #boleto { font-size: 18px; margin-top: 20px; color: #333; }
-  #search { padding: 8px; font-size: 14px; width: 150px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; }
-  .highlight { background: #FFD700 !important; color: #000; }
+  #buttons { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 5px; }
+  button { background: #25D366; color: #fff; border: none; padding: 8px; border-radius: 6px; }
+  button:disabled { background: #ccc; }
 </style>
 </head>
 <body>
+
 <div class="container">
   <h1>Rifa Moto FT150 Negra</h1>
-  <img src="moto-ft150-negra.jpg" alt="Moto FT150 Negra">
-  <p>Precio por boleto: $50 MXN</p>
-  <p>Boletos disponibles: <span id="available">500</span></p>
-
-  <input type="number" id="search" placeholder="Buscar boleto #">
+  <img src="moto-ft150-negra.jpg">
+  <p>Precio: $50 MXN</p>
+  <p>Disponibles: <span id="available">500</span></p>
 
   <div id="buttons"></div>
-
-  <div id="boleto">🎟️ Aquí saldrá tu boleto</div>
 </div>
 
 <script>
-const miWhatsApp = "5216871820645"; // Pon tu número con lada de México
+const miWhatsApp = "5216871820645"; // CAMBIA ESTO
 const totalBoletos = 500;
+
+// 👇 BOLETOS YA PAGADOS
 const boletosVendidos = [4,5,6,9,14,17,19,23,24,46,67,79];
 
 const buttonsDiv = document.getElementById('buttons');
-const botones = [];
 
-// Generar 500 botones
+// Crear botones
 for(let i = 1; i <= totalBoletos; i++){
   const btn = document.createElement('button');
-  btn.textContent = `#${i}`;
-  btn.addEventListener('click', () => {
+  btn.textContent = "#" + i;
+
+  if(boletosVendidos.includes(i)){
+    btn.disabled = true; // ya vendido
+  }
+
+  btn.onclick = () => {
     if(boletosVendidos.includes(i)){
-      alert('Este boleto ya fue vendido.');
+      alert("Este boleto ya está vendido");
       return;
     }
-    // Marcar como vendido
+
     boletosVendidos.push(i);
     btn.disabled = true;
-    document.getElementById('boleto').textContent = `¡Compraste el boleto #${i}! 🎟️`;
+
     document.getElementById('available').textContent = totalBoletos - boletosVendidos.length;
 
-    const mensaje = encodeURIComponent(`Hola, quiero comprar el boleto #${i} de la rifa.`);
-    window.open(`https://wa.me/${miWhatsApp}?text=${mensaje}`, '_blank');
-  });
+    const mensaje = encodeURIComponent("Hola, quiero el boleto #" + i);
+    window.open(`https://wa.me/${miWhatsApp}?text=${mensaje}`);
+  };
+
   buttonsDiv.appendChild(btn);
-  botones.push(btn);
 }
 
-// Función de búsqueda
-const searchInput = document.getElementById('search');
-searchInput.addEventListener('input', () => {
-  const value = parseInt(searchInput.value);
-  botones.forEach((b, idx) => {
-    b.classList.remove('highlight');
-    // Resaltar solo si no está vendido
-    if(idx + 1 === value){
-      b.classList.add('highlight');
-      b.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-    // Si está vendido, deshabilitar
-    if(boletosVendidos.includes(idx + 1)){
-      b.disabled = true;
-    }
-  });
-});
+// actualizar contador inicial
+document.getElementById('available').textContent = totalBoletos - boletosVendidos.length;
 </script>
+
 </body>
 </html>
